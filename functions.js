@@ -18,30 +18,35 @@ function onMessageSendHandler(event) {
 
       if (externalEmails.length > 0) {
         Office.context.ui.displayDialogAsync(
-          "https://bsmith-FC.github.io/email-recipient-check/confirm.html",
+          "https://bsmith-fc.github.io/email-recipient-check/confirm.html",
           { height: 40, width: 30, displayInIframe: true },
-          function (dialogResult) {
-            const dialog = dialogResult.value;
+		  function (dialogResult) {
+			if (dialogResult.status === Office.AsyncResultStatus.Succeeded) {
+			  const dialog = dialogResult.value;
 
-            dialog.addEventHandler(Office.EventType.DialogMessageReceived, function (arg) {
-              if (arg.message === "Send") {
-                dialog.close();
-                event.completed({ allowEvent: true });
-              } else {
-                dialog.close();
-                event.completed({ allowEvent: false });
-              }
-            });
+			  dialog.addEventHandler(Office.EventType.DialogMessageReceived, function (arg) {
+				if (arg.message === "Send") {
+				  dialog.close();
+				  event.completed({ allowEvent: true });
+				} else {
+				  dialog.close();
+				  event.completed({ allowEvent: false });
+				}
+			  });
 
-            dialog.addEventHandler(Office.EventType.DialogReady, function () {
-              dialog.messageParent(JSON.stringify(externalEmails));
-            });
+			  dialog.addEventHandler(Office.EventType.DialogReady, function () {
+				dialog.messageParent(JSON.stringify(externalEmails));
+			  });
 
-            dialog.addEventHandler(Office.EventType.DialogEventReceived, function () {
-              dialog.close();
-              event.completed({ allowEvent: false });
-            });
-          }
+			  dialog.addEventHandler(Office.EventType.DialogEventReceived, function () {
+				dialog.close();
+				event.completed({ allowEvent: false });
+			  });
+			} else {
+			  console.error("Dialog failed to open:", dialogResult.error);
+			  event.completed({ allowEvent: false });
+			}
+		  }
         );
       } else {
         event.completed({ allowEvent: true });

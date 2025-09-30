@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>Confirm External Recipients</title>
+  <script>https://appsforoffice.microsoft.com/lib/1/hosted/office.js</script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -46,8 +47,8 @@
     <h3>Warning: This email will be sent to external recipients:</h3>
     <ul id="externalRecipients"></ul>
     <p>Do you wish to proceed?</p>
-    <button onclick="confirmSend()">Yes, Send</button>
-    <button onclick="cancelSend()">Cancel</button>
+    <button id="send" onclick="confirmSend()">Yes, Send</button>
+    <button id="cancel" onclick="cancelSend()">Cancel</button>
   </div>
 </body>
 </html>
