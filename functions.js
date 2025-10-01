@@ -8,15 +8,17 @@ function onMessageSendHandler(event) {
 
   Office.context.mailbox.item.getRecipientsAsync("all", function (asyncResult) {
     if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
-      const recipients = asyncResult.value;
+      console.log("Office.AsyncResultStatus.Succeeded");
+	  const recipients = asyncResult.value;
       const allEmails = [...recipients.to, ...recipients.cc, ...recipients.bcc].map(r => r.emailAddress.toLowerCase());
 
       const externalEmails = allEmails.filter(email => {
         const domain = email.split("@")[1];
         return !approvedDomains.includes(domain);
       });
-
+		console.log("externalEmals length is" + externalEmails.length);
       if (externalEmails.length > 0) {
+		console.log("Attempting to open confirm dialog...");
         Office.context.ui.displayDialogAsync(
           "https://bsmith-fc.github.io/email-recipient-check/confirm.html",
           { height: 40, width: 30, displayInIframe: true },
