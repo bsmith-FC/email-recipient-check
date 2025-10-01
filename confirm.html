@@ -1,14 +1,38 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8" />
   <title>Confirm External Recipients</title>
   <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
-	<script>
-	  console.log("confirm.html loaded");
-	</script>
+  <script>
+    Office.onReady().then(function () {
+      console.log("confirm.html loaded");
+
+      Office.context.ui.addHandlerAsync(
+        Office.EventType.DialogParentMessageReceived,
+        function (arg) {
+          const externalEmails = JSON.parse(arg.message);
+          const listContainer = document.getElementById("externalRecipients");
+
+          externalEmails.forEach(email => {
+            const li = document.createElement("li");
+            li.textContent = email;
+            listContainer.appendChild(li);
+          });
+
+          document.getElementById("warningBox").style.display = "block";
+        }
+      );
+    });
+
+    function confirmSend() {
+      Office.context.ui.messageParent("Send");
+    }
+
+    function cancelSend() {
+      Office.context.ui.messageParent("Cancel");
+    }
+  </script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -22,38 +46,14 @@
       padding: 8px 16px;
     }
   </style>
-  <script>
-    Office.onReady(() => {
-      Office.context.ui.addHandlerAsync(Office.EventType.DialogParentMessageReceived, function (arg) {
-        const externalEmails = JSON.parse(arg.message);
-        const listContainer = document.getElementById("externalRecipients");
-
-        externalEmails.forEach(email => {
-          const li = document.createElement("li");
-          li.textContent = email;
-          listContainer.appendChild(li);
-        });
-
-        document.getElementById("warningBox").style.display = "block";
-      });
-    });
-
-    function confirmSend() {
-      Office.context.ui.messageParent("Send");
-    }
-
-    function cancelSend() {
-      Office.context.ui.messageParent("Cancel");
-    }
-  </script>
 </head>
 <body>
   <div id="warningBox" style="display: none;">
     <h3>Warning: This email will be sent to external recipients:</h3>
     <ul id="externalRecipients"></ul>
     <p>Do you wish to proceed?</p>
-    <button id="send" onclick="confirmSend()">Yes, Send</button>
-    <button id="cancel" onclick="cancelSend()">Cancel</button>
+    <button onclick="confirmSend()">Yes, Send</button>
+    <button onclick="cancelSend()">Cancel</button>
   </div>
 </body>
 </html>
