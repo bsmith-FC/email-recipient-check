@@ -1,3 +1,8 @@
+
+window.addEventListener("load", () => {
+  console.log("Window loaded");
+});
+
 Office.onReady(info => {
   if (info.host === Office.HostType.Outlook) {}
 
