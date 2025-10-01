@@ -2,8 +2,9 @@
 window.addEventListener("load", () => {
   console.log("Window loaded");
 });
-
+console.log("functions.js script loaded (outside Office.onReady)");
 Office.onReady(info => {
+	console.log("Office.onReady triggered");
   if (info.host === Office.HostType.Outlook) {
 	  console.log("functions.js loaded");
   }
