@@ -2,7 +2,7 @@ Office.onReady(info => {
   if (info.host === Office.HostType.Outlook) {}
 
 });
-
+console.log("functions.js loaded");
 function onMessageSendHandler(event) {
   const approvedDomains = ["fujimi.com", "fujimiinc.co.jp", "fujimiinc.com.tw", "fujimi.com.my", "fujimieurope.de"];
 
